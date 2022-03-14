@@ -1,0 +1,23 @@
+{
+  "name": "michelino_db_knex_entrega_7",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.3",
+    "i": "^0.3.7",
+    "knex": "^0.95.15",
+    "mysql": "^2.18.1",
+    "npm": "^8.5.4",
+    "socket.io": "^4.4.1",
+    "sqlite3": "^5.0.0",
+    "@vscode/sqlite3": "^5.0.7"
+  }
+}
