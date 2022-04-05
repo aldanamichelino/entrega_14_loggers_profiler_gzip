@@ -38,11 +38,32 @@
 
         <div class="d-flex flex-column w-100 justify-content-center align-items-center jumbotron">
             <h3>Centro de mensajes</h3>
+            <br>
+            <p id="compressionPercentage"></p>
 
             <div class="w-75">
-                <input type="text" class="w-100" name="userEmail" id="userEmail" placeholder="Ingresá tu email para enviar un mensaje">
+                <input type="text" class="w-100" name="userEmail" id="userEmail" placeholder="Correo electrónico">
             </div>
-            
+            <br>
+            <div class="w-75">
+                <input type="text" class="w-100" name="userName" id="userName" placeholder="Nombre">
+            </div>
+            <br>
+            <div class="w-75">
+                <input type="text" class="w-100" name="userLastName" id="userLastName" placeholder="Apellido">
+            </div>
+            <br>
+            <div class="w-75">
+                <input type="text" class="w-100" name="userAge" id="userAge" placeholder="Edad">
+            </div>
+            <br>
+            <div class="w-75">
+                <input type="text" class="w-100" name="userNickname" id="userNickname" placeholder="Alias">
+            </div>
+            <br>
+            <div class="w-75">
+                <input type="text" class="w-100" name="userAvatar" id="userAvatar" placeholder="Avatar">
+            </div>
             <br>
 
             <div id="chat-list" class="w-75 mb-4"></div>
@@ -59,6 +80,7 @@
         </div>
         
         <script src="/socket.io/socket.io.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
         <script src="./main.js"></script>

@@ -1,11 +1,17 @@
 const path = require('path');
 
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+  }
+  
+
 module.exports = {
     sqlite: {
         client: 'sqlite3',
         connection: {
             filename: path.resolve(__dirname, "./ecommerce.sqlite")
-        }
+        },
+        useNullAsDefault: true
     },
     mariaDB: {
         client: 'mysql',
@@ -16,6 +22,9 @@ module.exports = {
             password : '',
             database : 'test'
         }
+    },
+    mongoDB: {
+        db_uri: `mongodb+srv://amichelino:${process.env.DATABASE_PASSWORD}@ecommerce.jtfko.mongodb.net/ecommerce?retryWrites=true&w=majority`
     }
 
 }

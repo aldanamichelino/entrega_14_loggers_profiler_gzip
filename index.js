@@ -3,8 +3,10 @@ const { engine } = require('express-handlebars');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
+const { denormalize, schema } = require('normalizr');
 
-const { Contenedor } = require('./Contenedor');
+const MongoMensajesDao = require('./MongoMensajesDao');
+const {Contenedor} = require('./contenedores/Contenedor');
 const { sqlite, mariaDB } = require('./db/config');
 const knexSqlite = require('knex')(sqlite);
 const knexMDb = require('knex')(mariaDB);
@@ -13,6 +15,9 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 const httpServer = http.createServer(app);
 const io = socketIo(httpServer);
+const apiRoutes = require('./routers/index');
+const util = require('util');
+
 
 
 //Middlewares
@@ -31,6 +36,7 @@ app.engine('hbs', engine({
 app.set('views', './views');
 app.set('view engine', 'hbs');
 
+app.use('/api', apiRoutes);
 
 //Port connection
 httpServer.listen(PORT, () => {
@@ -42,8 +48,8 @@ io.on('connection',  async (socket) => {
     console.log('Nuevo cliente conectado');
 
     const contenedorProductos = new Contenedor(knexMDb, 'productos');
-    const contenedorMensajes = new Contenedor(knexSqlite, 'mensajes');
-    
+    const contenedorMensajes = new MongoMensajesDao;
+
 
     //Products
     const products = await contenedorProductos.getAll();
@@ -54,10 +60,11 @@ io.on('connection',  async (socket) => {
         const productos = await contenedorProductos.getAll();
         io.emit('products', productos);
     });
-
-
+    
+    
     //Messages
     const messages = await contenedorMensajes.getAll();
+    
     socket.emit('messages', messages);
 
     socket.on('new-message', async (newMessage) => {
