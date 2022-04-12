@@ -23,8 +23,7 @@ const messageArraySchema = new normalizr.schema.Entity('messageArray', {
     messages: [messageSchema]
 });
 const compressionPercentage = document.getElementById('compressionPercentage');
-
-
+const loginButton = document.getElementById('login-button');
 
 socket.on('products', (products) => {
     fetch('http://localhost:8080/list.hbs')
