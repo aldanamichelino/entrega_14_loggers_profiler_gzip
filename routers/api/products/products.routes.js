@@ -1,6 +1,6 @@
 const express = require('express');
-const { getAllProducts } = require('../../controllers/products/products.controllers');
-const errorMiddleware = require('../../middlewares/errorMiddleware');
+const { getAllProducts } = require('../../../controllers/products/products.controllers');
+const errorMiddleware = require('../../../middlewares/errorMiddleware');
 const router = express.Router();
 
 //Routes

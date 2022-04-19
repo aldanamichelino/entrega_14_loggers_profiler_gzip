@@ -5,24 +5,52 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link type="text/css" rel="stylesheet" href="styles.css" media="screen,projection"/>
         <title>App Coderhouse</title>
     </head>
     <body>
-        <div class="d-flex flex-column w-100 justify-content-center align-items-center jumbotron">
-            <h3>Por favor, inicia sesión</h3>
+        <div class="show-element flex-column w-100 justify-content-center align-items-center jumbotron" id="register-form">
+            <h3>Registro</h3>
             <br>
-            <form action="/login" method="post" id="login-form" class="w-75"> 
+            <form action="/api/auth/register" method="post" class="w-75"> 
                 <div class="d-flex flex-column">
-                    <label for="name">Ingresá tu nombre</label>
-                    <input type="text" name="name" id="usernameLogin" placeholder="Nombre">
+                    <label for="username">Correo</label>
+                    <input type="text" name="username" placeholder="aryastark@housestark.com">
                 </div>           
                 <br>
-                <div>
-                    <button type="submit" class="bg-success" id="login-button">Enviar</button>
+                <div class="d-flex flex-column">
+                    <label for="password">Contraseña</label>
+                    <input type="password" name="password" placeholder="Starks1234!">
+                </div> 
+                <br>
+                <div class="d-flex justify-content-around">
+                    <button type="button" class="button-authentication-back" id="login-button">Iniciar sesión</button>
+                    <button type="submit" class="button-authentication">Registrarme</button>
                 </div>
             </form>
         </div>
 
-        <script src="./main.js"></script>
+        <div class="hide-element flex-column w-100 justify-content-center align-items-center jumbotron" id="login-form">
+            <h3>Login</h3>
+            <br>
+            <form action="/api/auth/login" method="post" class="w-75"> 
+                <div class="d-flex flex-column">
+                    <label for="username">Correo</label>
+                    <input type="text" name="username" placeholder="aryastark@housestark.com">
+                </div>           
+                <br>
+                <div class="d-flex flex-column">
+                    <label for="password">Contraseña</label>
+                    <input type="password" name="password" placeholder="Starks1234!">
+                </div> 
+                <br>
+                <div class="d-flex justify-content-around">
+                    <button type="button" class="button-authentication-back" id="register-button">Registrarme</button>
+                    <button type="submit" class="button-authentication">Iniciar sesión</button>
+                </div>
+            </form>
+        </div>
+
+        <script src="./register.js"></script>
     </body>
 </html>

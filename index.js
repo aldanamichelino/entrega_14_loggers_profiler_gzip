@@ -1,12 +1,13 @@
 const express = require('express');
 const { engine } = require('express-handlebars');
+const passport = require('./middlewares/passport');
 const path = require('path');
 const http = require('http');
 const socketIo = require('socket.io');
 const MongoStore = require('connect-mongo');
 
 const MongoMensajesDao = require('./MongoMensajesDao');
-const {Contenedor} = require('./contenedores/Contenedor');
+const {Contenedor} = require('./models/containers/Contenedor');
 const { sqlite, mariaDB } = require('./db/config');
 // const knexSqlite = require('knex')(sqlite);
 const knexMDb = require('knex')(mariaDB);
@@ -15,12 +16,9 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 const httpServer = http.createServer(app);
 const io = socketIo(httpServer);
-const apiRoutes = require('./routers/index');
+const apisRoutes = require('./routers/app.routers');
 const session = require('express-session');
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-  }
+require('dotenv').config();
 
 
 //Middlewares
@@ -30,17 +28,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
     name: 'some-session',
-    secret: 'secret-session',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
         mongoUrl: `mongodb+srv://amichelino:${process.env.DATABASE_PASSWORD}@ecommerce.jtfko.mongodb.net/ecommerce?retryWrites=true&w=majority`,
     }),
-    rolling: true,
+    // rolling: true,
     cookie: {
         maxAge: 600000
     }
 }));
+
+//es necesario setear esto debajo de la session de express
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 //Template engine
@@ -51,56 +53,8 @@ app.engine('hbs', engine({
 app.set('views', './views');
 app.set('view engine', 'hbs');
 
-app.use('/api', apiRoutes);
+app.use(apisRoutes);
 
-//Routes
-app.post('/login', (req, res) => {
-    const user = req.body.name;
-    if(user){
-        req.session.user = user;
-        req.session.save((err) => {
-            if(err) {
-                console.log(err);
-                res.redirect('/')
-            }
-
-            res.redirect('/productos');
-        });
-    } else {
-        res.redirect('/');
-    }
-});
-
-app.get('/productos', async (req, res) => {
-    try{
-        const user = await req.session.user;
-        if(user){
-            res.render('productos', { user });
-        } else {
-            res.redirect('/');
-        }
-    } catch(err) {
-      console.log(err);
-    }
-});
-
-app.get('/logout', async (req, res) => {
-    try {
-        const user = await req.session.user;
-        req.session.destroy(err => {
-            res.clearCookie('some-session');
-            if (err) {
-                console.log(err);
-            }
-            else {
-                res.render('bye-bye', { user });
-            }
-        });
-    }
-    catch(err) {
-      console.log(err);
-    }
-  });
 
 //Port connection
 httpServer.listen(PORT, () => {

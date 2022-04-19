@@ -1,0 +1,23 @@
+.show-element{
+    display: flex !important;
+}
+
+.hide-element{
+    display: none !important;
+}
+
+.button-authentication{
+    background-color: #20c997;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.button-authentication-back{
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}

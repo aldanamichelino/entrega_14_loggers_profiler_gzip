@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { mongoDB } = require('../db/config');
+const { mongoDB } = require('../../db/config');
 const { normalize, schema } = require('normalizr');
 const util = require('util');
 

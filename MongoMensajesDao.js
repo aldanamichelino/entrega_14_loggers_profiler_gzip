@@ -1,4 +1,4 @@
-const ContenedorMongo = require('./contenedores/ContenedorMongo');
+const ContenedorMongo = require('./models/containers/ContenedorMongo');
 const { Schema } = require('mongoose');
 
 const mensajesSchema = new Schema({
