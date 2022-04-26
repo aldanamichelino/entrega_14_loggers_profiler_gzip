@@ -1,8 +1,5 @@
 const path = require('path');
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-  }
+require('dotenv').config();
   
 
 module.exports = {

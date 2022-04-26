@@ -1,12 +1,14 @@
 const path = require('path');
 const express = require('express');
 const apiRoutes = require('./api/api.routes');
+const apiRandom = require('./randoms/randoms.router');
 const auth = require('../middlewares/auth');
 
 const router = express.Router();
 
 //Routes
 router.use('/api', apiRoutes);
+router.use('/api_randoms', apiRandom);
 
 router.get('/', (req, res) => {
     const user = req.user;
@@ -42,6 +44,10 @@ router.get('/logout', auth, async (req, res, next) => {
             res.redirect('/');
         }
     });
+});
+
+router.get('/info', (req, res) => {
+    res.render('info', {process: process, rss: process.memoryUsage().rss, argv: process.argv.slice(2)});
 });
 
 module.exports = router;

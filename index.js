@@ -12,13 +12,24 @@ const { sqlite, mariaDB } = require('./db/config');
 // const knexSqlite = require('knex')(sqlite);
 const knexMDb = require('knex')(mariaDB);
 
-const PORT = process.env.PORT || 8080;
 const app = express();
 const httpServer = http.createServer(app);
 const io = socketIo(httpServer);
 const apisRoutes = require('./routers/app.routers');
 const session = require('express-session');
 require('dotenv').config();
+const minimist = require('minimist');
+
+const args = minimist(process.argv.slice(2), {
+    default: {
+      PORT: 3000,
+    },
+    alias: {
+      p: 'PORT'
+    }
+  });
+
+const PORT = args.PORT || 8080;
 
 
 //Middlewares
@@ -34,7 +45,6 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: `mongodb+srv://amichelino:${process.env.DATABASE_PASSWORD}@ecommerce.jtfko.mongodb.net/ecommerce?retryWrites=true&w=majority`,
     }),
-    // rolling: true,
     cookie: {
         maxAge: 600000
     }

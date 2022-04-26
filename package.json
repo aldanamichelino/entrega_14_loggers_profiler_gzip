@@ -19,6 +19,7 @@
     "express-handlebars": "^6.0.3",
     "express-session": "^1.17.2",
     "knex": "^0.95.15",
+    "minimist": "^1.2.6",
     "moment": "^2.29.3",
     "mongoose": "^6.2.9",
     "mysql": "^2.18.1",
@@ -30,7 +31,8 @@
     "socket.io": "^4.4.1",
     "sqlite3": "^5.0.0",
     "util": "^0.12.4",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yargs": "^17.4.1"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.1"
