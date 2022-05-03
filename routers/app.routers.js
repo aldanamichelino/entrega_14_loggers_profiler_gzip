@@ -1,14 +1,13 @@
 const path = require('path');
 const express = require('express');
 const apiRoutes = require('./api/api.routes');
-const apiRandom = require('./randoms/randoms.router');
 const auth = require('../middlewares/auth');
+const os = require('os');
 
 const router = express.Router();
 
 //Routes
 router.use('/api', apiRoutes);
-router.use('/api_randoms', apiRandom);
 
 router.get('/', (req, res) => {
     const user = req.user;
@@ -47,7 +46,12 @@ router.get('/logout', auth, async (req, res, next) => {
 });
 
 router.get('/info', (req, res) => {
-    res.render('info', {process: process, rss: process.memoryUsage().rss, argv: process.argv.slice(2)});
+    res.render('info', {process: process, rss: process.memoryUsage().rss, argv: process.argv.slice(2), processors: os.cpus().length});
+});
+
+router.get('*', (req, res) => {
+    console.log(process.pid)
+    res.json(process.pid);
 });
 
 module.exports = router;

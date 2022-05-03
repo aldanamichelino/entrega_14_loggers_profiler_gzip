@@ -1,0 +1,22 @@
+#Nodemon
+nodemon index.js --PORT 3000 --MODE 'CLUSTER'
+nodemon index.js --PORT 3000 --MODE 'FORK'
+
+#Forever
+forever start ./index.js --watch -- -p 3000 -m "CLUSTER"
+forever start ./index.js --watch -- -p 3000 -m "FORK"
+forever list
+forever stopall
+
+#PM2
+pm2 start index.js --name "fork-server" --watch -- 3000
+pm2 start index.js --name "cluster-server" -i max --watch -- 3001
+pm2 list
+pm2 stop all
+pm2 delete all
+
+#Sistema
+tasklist /fi "imagename eq node.exe"
+taskkill /pid <PID> /f
+
+
