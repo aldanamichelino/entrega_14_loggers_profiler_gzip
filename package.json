@@ -13,6 +13,7 @@
     "@vscode/sqlite3": "^5.0.7",
     "bcrypt": "^5.0.1",
     "cluster": "^0.7.7",
+    "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
@@ -35,6 +36,7 @@
     "sqlite3": "^5.0.0",
     "util": "^0.12.4",
     "uuid": "^8.3.2",
+    "winston": "^3.7.2",
     "yargs": "^17.4.1"
   },
   "devDependencies": {

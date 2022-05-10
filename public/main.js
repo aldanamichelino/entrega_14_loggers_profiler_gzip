@@ -1,4 +1,4 @@
-const socket = io('http://localhost:8080');
+const socket = io('http://localhost:3001');
 
 const productsInfo = document.getElementById('productsInfo');
 const addProductForm = document.getElementById('addProductForm');
@@ -25,7 +25,7 @@ const messageArraySchema = new normalizr.schema.Entity('messageArray', {
 const compressionPercentage = document.getElementById('compressionPercentage');
 
 socket.on('products', (products) => {
-    fetch('http://localhost:8080/list.hbs')
+        fetch('http://localhost:8080/list.hbs')
         .then(data => data.text())
         .then(data => {
             const template = Handlebars.compile(data);
