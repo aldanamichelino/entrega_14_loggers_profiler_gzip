@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "test": "node benchmark.js",
+    "start": "0x ."
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@vscode/sqlite3": "^5.0.7",
+    "autocannon": "^7.9.0",
     "bcrypt": "^5.0.1",
     "cluster": "^0.7.7",
     "compression": "^1.7.4",

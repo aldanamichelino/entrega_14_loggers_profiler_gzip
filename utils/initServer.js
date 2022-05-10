@@ -102,6 +102,19 @@ const startServer = (args) => {
     });
 
     app.get('/info', (req, res) => {
+        // const renderInfo = {
+        //     argumentosEntrada: process.argv.slice(2),
+        //     nombrePlataforma: process.platform,
+        //     versionNode: process.version,
+        //     memoriaTotalReservada: process.memoryUsage().rss,
+        //     pathEjecucion: process.execPath,
+        //     idProceso: process.pid,
+        //     carpetaProyecto: process.cwd(),
+        //     numeroProcesadoresDisponibles: os.cpus().length
+        // };
+
+        // console.log(renderInfo);
+
         res.render('info', {process: process, rss: process.memoryUsage().rss, argv: process.argv.slice(2), processors: os.cpus().length});
     });
 
