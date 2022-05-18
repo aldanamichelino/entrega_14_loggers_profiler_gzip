@@ -1,7 +1,6 @@
-const ContenedorMongo = require('./models/containers/ContenedorMongo');
 const { Schema } = require('mongoose');
 
-const mensajesSchema = new Schema({
+const MessagesSchema = new Schema({
     author: {
         id: {type: String, require: true},
         name: {type: String, require: true},
@@ -14,10 +13,4 @@ const mensajesSchema = new Schema({
     timestamp: {type: String, require: true}
 });
 
-class MongoMensajesDao extends ContenedorMongo {
-    constructor(){
-        super('mensajes', mensajesSchema);
-    }
-}
-
-module.exports = MongoMensajesDao;
+module.exports = MessagesSchema;

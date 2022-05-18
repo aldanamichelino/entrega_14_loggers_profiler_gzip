@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const { mongoDB } = require('../../db/config');
 const { normalize, schema } = require('normalizr');
-const util = require('util');
 
 class ContenedorMongo{
     constructor(collection, schema){
@@ -10,7 +9,7 @@ class ContenedorMongo{
     }
 
     async connect(){
-        await mongoose.connect(mongoDB.db_uri);
+        await mongoose.connect(mongoDB.db_uri, {dbName: 'ecommerce'});
     }
 
     async save(object) {
@@ -24,26 +23,7 @@ class ContenedorMongo{
 
     async getAll(){
         try{
-            const documents = await this.model.find({}, {__v: 0}).lean();
-
-            const documentos = {
-                id: "mensajes",
-                messages: documents
-            }
-
-            const authorSchema = new schema.Entity('author');
-            
-            const messageSchema =  new schema.Entity('message', {
-                author: authorSchema
-            }, {idAttribute: '_id'});
-
-            const messageArraySchema = new schema.Entity('messageArray', {
-                messages: [messageSchema]
-            });
-
-            const normalizedData = normalize(documentos, messageArraySchema);
-
-            return normalizedData;
+            return await this.model.find({}, {__v: 0}).lean();
         } catch(error){
             console.log(error.message);
         }

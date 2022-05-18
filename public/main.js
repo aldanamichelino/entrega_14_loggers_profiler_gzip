@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3001');
+const socket = io();
 
 const productsInfo = document.getElementById('productsInfo');
 const addProductForm = document.getElementById('addProductForm');
@@ -19,13 +19,13 @@ const authorSchema = new normalizr.schema.Entity('author');
 const messageSchema =  new normalizr.schema.Entity('message', {
     author: authorSchema
 }, {idAttribute: '_id'});
-const messageArraySchema = new normalizr.schema.Entity('messageArray', {
+const messagesSchema = new normalizr.schema.Entity('messages', {
     messages: [messageSchema]
 });
 const compressionPercentage = document.getElementById('compressionPercentage');
 
 socket.on('products', (products) => {
-        fetch('http://localhost:8080/list.hbs')
+        fetch('list.hbs')
         .then(data => data.text())
         .then(data => {
             const template = Handlebars.compile(data);
@@ -47,10 +47,9 @@ addProductForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const newProduct = {
-        name: nameInput.value,
+        title: nameInput.value,
         price: priceInput.value,
-        imageUrl: imageUrlInput.value,
-        created_at: moment()
+        thumbnail: imageUrlInput.value
     };
 
     socket.emit('new-product', newProduct);
@@ -73,11 +72,13 @@ const renderMessage = (newMessage) => {
 
 socket.on('messages', (messages) => {
 
-    const denormalizeMessages = normalizr.denormalize(messages.result, messageArraySchema, messages.entities);
+    const denormalizeMessages = normalizr.denormalize(messages.result, messagesSchema, messages.entities);
 
     let percentage = JSON.stringify(denormalizeMessages.messages).length / JSON.stringify(messages).length;
 
     compressionPercentage.innerHTML = `Porcentaje de compresión: ${percentage.toFixed(2)}%`
+
+    document.getElementById('chat-list').innerHTML = "";
 
     if(denormalizeMessages.messages && denormalizeMessages.messages.length){
         denormalizeMessages.messages.map(message => {
@@ -111,8 +112,4 @@ sendMessage.addEventListener('submit', (e) => {
         alert('Debes escribir un mensaje');
     }
 
-});
-
-socket.on('messages-to-everyone', (newMessage) => {
-    renderMessage(newMessage);
 });

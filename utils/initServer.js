@@ -11,8 +11,8 @@ const startServer = (args) => {
     const httpServer = new HttpServer(app)
     const io = new SocketServer(httpServer)
     
-    const MongoMensajesDao = require('../MongoMensajesDao');
-    const {Contenedor} = require('../models/containers/Contenedor');
+    const MongoMessageDao = require('../models/daos/Messages.dao');
+    const MongoProductsDao = require('../models/daos/Products.dao');
     const apiRoutes = require('../routers/api/api.routes');
     const session = require('express-session');
     const { sqlite, mariaDB } = require('../db/config');
@@ -21,7 +21,16 @@ const startServer = (args) => {
     const auth = require('../middlewares/auth');
     const os = require('os');
     const { write } = require('../utils/winston.utils');
-    
+    const { normalize, schema } = require('normalizr');
+
+    const authorSchema = new schema.Entity('author');
+    const messageSchema = new schema.Entity('message', {
+        author: authorSchema
+    }, {idAttribute: '_id'});
+    const messagesSchema = new schema.Entity('messages', {
+        messages: [messageSchema]
+    });
+
     const PORT = args.PORT || 8080;
 
     //Middlewares
@@ -35,6 +44,7 @@ const startServer = (args) => {
         saveUninitialized: false,
         store: MongoStore.create({
             mongoUrl: process.env.MONGO_URI,
+            dbName: 'ecommerce'
         }),
         cookie: {
             maxAge: 600000
@@ -142,29 +152,45 @@ const startServer = (args) => {
         try{
             console.log('Nuevo cliente conectado');
 
-            const contenedorProductos = new Contenedor(knexMDb, 'productos');
-            const contenedorMensajes = new MongoMensajesDao;
+            const ProductContainer = new MongoProductsDao;
+            const MessageContainer = new MongoMessageDao;
 
             //Products
-            const products = await contenedorProductos.getAll();
-            console.log(products);
+            const products = await ProductContainer.getAll();
             socket.emit('products', products);
 
             socket.on('new-product', async (newProduct) => {
-                await contenedorProductos.save(newProduct);
-                const productos = await contenedorProductos.getAll();
-                io.emit('products', productos);
+                await ProductContainer.save(newProduct);
+                const products = await ProductContainer.getAll();
+                io.emit('products', products);
             });
         
         
             //Messages
-            const messages = await contenedorMensajes.getAll();
-            socket.emit('messages', messages);
+            const messages = await MessageContainer.getAll();
+            const messagesToNormalize = {
+                id: 'messages',
+                messages: messages
+            }
+
+            const normalizedMessages = normalize(messagesToNormalize, messagesSchema);
+
+            socket.emit('messages', normalizedMessages);
 
             socket.on('new-message', async (newMessage) => {
-                await contenedorMensajes.save(newMessage);
+                await MessageContainer.save(newMessage);
+
+                const messages = await MessageContainer.getAll();
+
+                    const messagesToNormalize = {
+                        id: 'messages',
+                        messages: messages
+                    }
                 
-                io.emit('messages-to-everyone', newMessage);
+                    const normalizedMessages = normalize(messagesToNormalize, messagesSchema);
+
+                    io.emit('messages', normalizedMessages)
+            
             });
 
 
