@@ -4,16 +4,21 @@ const {startServer} = require('./utils/initServer');
 const minimist = require('minimist');
 require('dotenv').config();
 
-const args = minimist(process.argv.slice(2), {
-    default: {
-      PORT: 3001,
-      MODE: 'FORK'
-    },
-    alias: {
-      p: 'PORT',
-      m: 'MODE'
-    }
-});
+// const args = minimist(process.argv.slice(2), {
+//     default: {
+//       PORT: 3001,
+//       MODE: 'FORK'
+//     },
+//     alias: {
+//       p: 'PORT',
+//       m: 'MODE'
+//     }
+// });
+
+const args = {
+    PORT: process.env.PORT || 8080,
+    MODE: process.env.MODE || 'FORK'
+};
 
 const CPUS_NUM = os.cpus().length;
 
