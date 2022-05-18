@@ -21,7 +21,7 @@ module.exports = {
         }
     },
     mongoDB: {
-        db_uri: `mongodb+srv://amichelino:${process.env.DATABASE_PASSWORD}@ecommerce.jtfko.mongodb.net/ecommerce?retryWrites=true&w=majority`
+        db_uri: `mongodb+srv://aldanam:soydepiscis@ecommerce.jtfko.mongodb.net/?retryWrites=true&w=majority`
     }
 
 }

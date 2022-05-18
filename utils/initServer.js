@@ -34,7 +34,7 @@ const startServer = (args) => {
         resave: false,
         saveUninitialized: false,
         store: MongoStore.create({
-            mongoUrl: `mongodb+srv://amichelino:${process.env.DATABASE_PASSWORD}@ecommerce.jtfko.mongodb.net/ecommerce?retryWrites=true&w=majority`,
+            mongoUrl: `mongodb+srv://aldanam:soydepiscis@ecommerce.jtfko.mongodb.net/?retryWrites=true&w=majority`,
         }),
         cookie: {
             maxAge: 600000
