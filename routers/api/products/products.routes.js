@@ -4,7 +4,7 @@ const errorMiddleware = require('../../../middlewares/errorMiddleware');
 const router = express.Router();
 
 //Routes
-router.get('/productos-test', getAllProducts);
+// router.get('/productos-test', getAllProducts);
 
 //error middleware
 router.use(errorMiddleware);

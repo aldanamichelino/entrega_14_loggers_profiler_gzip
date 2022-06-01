@@ -11,8 +11,8 @@ const startServer = (args) => {
     const httpServer = new HttpServer(app)
     const io = new SocketServer(httpServer)
     
-    const MongoMessageDao = require('../models/daos/Messages.dao');
-    const MongoProductsDao = require('../models/daos/Products.dao');
+    const { postMessageController, getAllMessagesController } = require('../controllers/messages/messages.controller');
+    const { postProductController, getAllProductsController } = require('../controllers/products/products.controller');
     const apiRoutes = require('../routers/api/api.routes');
     const session = require('express-session');
     const { sqlite, mariaDB } = require('../db/config');
@@ -21,15 +21,6 @@ const startServer = (args) => {
     const auth = require('../middlewares/auth');
     const os = require('os');
     const { write } = require('../utils/winston.utils');
-    const { normalize, schema } = require('normalizr');
-
-    const authorSchema = new schema.Entity('author');
-    const messageSchema = new schema.Entity('message', {
-        author: authorSchema
-    }, {idAttribute: '_id'});
-    const messagesSchema = new schema.Entity('messages', {
-        messages: [messageSchema]
-    });
 
     const PORT = args.PORT || 8080;
 
@@ -152,44 +143,28 @@ const startServer = (args) => {
         try{
             console.log('Nuevo cliente conectado');
 
-            const ProductContainer = new MongoProductsDao;
-            const MessageContainer = new MongoMessageDao;
-
             //Products
-            const products = await ProductContainer.getAll();
+            const products = await getAllProductsController();
             socket.emit('products', products);
 
             socket.on('new-product', async (newProduct) => {
-                await ProductContainer.save(newProduct);
-                const products = await ProductContainer.getAll();
+                await postProductController(newProduct);
+                const products = await getAllProductsController();
                 io.emit('products', products);
             });
         
         
             //Messages
-            const messages = await MessageContainer.getAll();
-            const messagesToNormalize = {
-                id: 'messages',
-                messages: messages
-            }
+            const messages = await getAllMessagesController();
 
-            const normalizedMessages = normalize(messagesToNormalize, messagesSchema);
-
-            socket.emit('messages', normalizedMessages);
+            socket.emit('messages', messages);
 
             socket.on('new-message', async (newMessage) => {
-                await MessageContainer.save(newMessage);
+                await postMessageController(newMessage);
 
-                const messages = await MessageContainer.getAll();
+                const messages = await getAllMessagesController();
 
-                    const messagesToNormalize = {
-                        id: 'messages',
-                        messages: messages
-                    }
-                
-                    const normalizedMessages = normalize(messagesToNormalize, messagesSchema);
-
-                    io.emit('messages', normalizedMessages)
+                io.emit('messages', messages);
             
             });
 

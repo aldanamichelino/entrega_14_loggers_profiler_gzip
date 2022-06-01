@@ -29,6 +29,14 @@ class ContenedorMongo{
         }
     }
 
+    async getById(id){
+        try{
+            return await this.model.findById(id, {__v: 0}).lean();
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+
 }
 
 module.exports = ContenedorMongo;

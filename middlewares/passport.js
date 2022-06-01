@@ -1,10 +1,8 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const UsersDao = require('../models/daos/Users.dao');
+const { createUser, getUserById, getUserByEmail} = require('../services/users/users.service');
 const { formatUserForDB } = require('../utils/users.utils');
-
-const User = new UsersDao();
 
 const salt = async() => await bcrypt.genSalt(10);
 const createHash = async(password) => await bcrypt.hash(password, parseInt(salt()));
@@ -13,7 +11,7 @@ const isValidPassword = async (user, password) => await bcrypt.compare(password,
 //Passport local strategy
 passport.use('login', new LocalStrategy(async (username, password, done) => {
     try{
-        const user = await User.getByEmail(username);
+        const user = await getUserByEmail(username);
         const validPassword = await isValidPassword(user, password);
         if(!validPassword){
             console.log('Usuario o contraseña inválidos');
@@ -37,7 +35,7 @@ passport.use('register', new LocalStrategy({
             };
 
             const newUser = formatUserForDB(userObject);
-            const user = await User.createUser(newUser);
+            const user = await createUser(newUser);
             return done(null, user);
        } catch(error) {
             console.log('Error signing up >>>', error);
@@ -56,7 +54,7 @@ passport.serializeUser((user, done) => {
 //Deserialización
 passport.deserializeUser(async (id, done) => {
     console.log('Dentro del deserializer');
-    const user = await User.getById(id);
+    const user = await getUserById(id);
     done(null, user);
 });
 
