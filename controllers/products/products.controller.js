@@ -1,10 +1,11 @@
-const { createProduct, getAllProducts } = require('../../services/products/products.service');
+const { ProductService} = require('../../services/products/products.service');
 const { write } = require('../../winston/winston.config');
 
+const productService = new ProductService;
 
 async function postProductController(productData){
     try{
-        return await createProduct(productData);
+        return await productService.createProduct(productData);
     } catch(error){
         write('error', error.message);
         throw new Error(JSON.stringify(error.message));
@@ -13,7 +14,7 @@ async function postProductController(productData){
 
 async function getAllProductsController(){
     try{
-        return await getAllProducts();
+        return await productService.getAllProducts();
     } catch(error){
         write('error', error.message);
         throw new Error(JSON.stringify(error.message));

@@ -1,10 +1,12 @@
-const { createMessage, getAllMessages } = require('../../services/messages/messages.service');
+const { MessageService } = require('../../services/messages/messages.service');
 const { write } = require('../../winston/winston.config');
+
+const messageService = new MessageService;
 
 
 async function postMessageController(messageData){
     try{
-        return await createMessage(messageData);
+        return await messageService.createMessage(messageData);
     } catch(error){
         write('error', error.message);
         throw new Error(JSON.stringify(error.message));
@@ -13,7 +15,7 @@ async function postMessageController(messageData){
 
 async function getAllMessagesController(){
     try{
-        return await getAllMessages();
+        return await messageService.getAllMessages();
     } catch(error){
         write('error', error.message);
         throw new Error(JSON.stringify(error.message));

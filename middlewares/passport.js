@@ -1,17 +1,19 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const { createUser, getUserById, getUserByEmail} = require('../services/users/users.service');
-const { formatUserForDB } = require('../utils/users.utils');
+const { UserService } = require('../services/users/users.service');
+const UserDTO = require('../models/dtos/user.dto')
 
 const salt = async() => await bcrypt.genSalt(10);
 const createHash = async(password) => await bcrypt.hash(password, parseInt(salt()));
 const isValidPassword = async (user, password) => await bcrypt.compare(password, user.password);
 
+const userService = new UserService;
+
 //Passport local strategy
 passport.use('login', new LocalStrategy(async (username, password, done) => {
     try{
-        const user = await getUserByEmail(username);
+        const user = await userService.getUserByEmail(username);
         const validPassword = await isValidPassword(user, password);
         if(!validPassword){
             console.log('Usuario o contraseña inválidos');
@@ -34,8 +36,8 @@ passport.use('register', new LocalStrategy({
                 password: await createHash(password)
             };
 
-            const newUser = formatUserForDB(userObject);
-            const user = await createUser(newUser);
+            const newUser = new UserDTO(userObject);
+            const user = await userService.createUser(newUser);
             return done(null, user);
        } catch(error) {
             console.log('Error signing up >>>', error);
@@ -54,7 +56,7 @@ passport.serializeUser((user, done) => {
 //Deserialización
 passport.deserializeUser(async (id, done) => {
     console.log('Dentro del deserializer');
-    const user = await getUserById(id);
+    const user = await userService.getUserById(id);
     done(null, user);
 });
 

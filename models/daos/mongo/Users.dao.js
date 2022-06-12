@@ -1,5 +1,5 @@
-const ContainerMongo = require('../containers/ContenedorMongo');
-const UserSchema = require('../schemas/User.schema');
+const ContainerMongo = require('../../containers/ContenedorMongo');
+const UserSchema = require('../../schemas/User.schema');
 
 class UsersDao extends ContainerMongo {
     static instance;

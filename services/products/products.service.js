@@ -1,27 +1,31 @@
-const ProductsDao = require('../../models/daos/Products.dao');
+const {ProductRepository} = require('../../repositories/products.repository');
 
-const productInstance = new ProductsDao;
-
-async function createProduct(productData){
-    try {
-        return await productInstance.save(productData);
-    } catch(error) {
-        write('error', error.message);
-        throw new Error(JSON.stringify(error.message));
+class ProductService {
+    constructor() {
+        this.productDAO = new ProductRepository;
     }
     
-}
-
-async function getAllProducts(){
-    try {
-        return await productInstance.getAll();
-    } catch(error) {
-        write('error', error.message);
-        throw new Error(JSON.stringify(error.message));
+    async createProduct(productData){
+        try {
+            return await this.productDAO.save(productData);
+        } catch(error) {
+            write('error', error.message);
+            throw new Error(JSON.stringify(error.message));
+        }
+        
+    }
+    
+    async getAllProducts(){
+        try {
+            return await this.productDAO.getAll();
+        } catch(error) {
+            write('error', error.message);
+            throw new Error(JSON.stringify(error.message));
+        }
     }
 }
 
+
 module.exports = {
-    createProduct,
-    getAllProducts
+    ProductService
 }

@@ -4,7 +4,9 @@ const { normalize, schema } = require('normalizr');
 
 class ContenedorMongo{
     constructor(collection, schema){
-        this.connect().then(() => console.log('Database connected'));
+        if(!mongoose.connection.readyState){
+            this.connect().then(() => console.log('Database connected'));
+        }
         this.model = mongoose.model(collection, schema);
     }
 

@@ -1,8 +1,6 @@
-const MessagesDao = require('../../models/daos/Messages.dao');
 const { write } = require('../../winston/winston.config');
-
-const messageInstance = new MessagesDao;
 const { normalize, schema } = require('normalizr');
+const { MessageRepository } = require('../../repositories/message.repository')
 
 const authorSchema = new schema.Entity('author');
 const messageSchema = new schema.Entity('message', {
@@ -12,32 +10,38 @@ const messagesSchema = new schema.Entity('messages', {
     messages: [messageSchema]
 });
 
-async function createMessage(messageData){
-    try {
-        return await messageInstance.save(messageData);
-    } catch(error) {
-        write('error', error.message);
-        throw new Error(JSON.stringify(error.message));
+class MessageService {
+    constructor() {
+        this.messageDAO = new MessageRepository;
     }
-}
-
-async function getAllMessages(){
-    try {
-        const messages = await messageInstance.getAll();
-        
-        const messagesToNormalize = {
-            id: 'messages',
-            messages: messages
+    
+    async createMessage(messageData){
+        try {
+            return await this.messageDAO.save(messageData);
+        } catch(error) {
+            write('error', error.message);
+            throw new Error(JSON.stringify(error.message));
         }
-
-        return normalize(messagesToNormalize, messagesSchema);
-    } catch(error) {
-        write('error', error.message);
-        throw new Error(JSON.stringify(error.message));
+    }
+    
+    async getAllMessages(){
+        try {
+            const messages = await this.messageDAO.getAll();
+            
+            const messagesToNormalize = {
+                id: 'messages',
+                messages: messages
+            }
+    
+            return normalize(messagesToNormalize, messagesSchema);
+        } catch(error) {
+            write('error', error.message);
+            throw new Error(JSON.stringify(error.message));
+        }
     }
 }
+
 
 module.exports = {
-    createMessage,
-    getAllMessages
+    MessageService
 }
