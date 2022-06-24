@@ -12,8 +12,8 @@ const getProducts = () => {
     try {
 
         return axios.get('http://localhost:8080/productos', { auth: {
-            username: "aldana.michelino@gmail.com",
-            password: "Aldana23!"
+            username: "",
+            password: ""
           }});
     } catch (error) {
         throw new Error(error.message);
@@ -23,8 +23,8 @@ const getProducts = () => {
 const createProduct = (data) => {
     try {
         return axios.post(`http://localhost:8080/productos`, data, { auth: {
-            username: "aldana.michelino@gmail.com",
-            password: "Aldana23!"
+            username: "",
+            password: ""
           }});
     } catch (error) {
         throw new Error(error.message);
@@ -35,7 +35,7 @@ const createProduct = (data) => {
 (async () => {
     try {
         console.log('login');
-        const login = await loginUser({ username: "aldana.michelino@gmail.com", password: "Aldana23!" });
+        const login = await loginUser({ username: "", password: "" });
         console.log('loginstatus', login.status);
 
         if (login.data.success) {

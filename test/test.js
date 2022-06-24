@@ -6,7 +6,7 @@ let cookie;
 
 describe("POST /login", function () {
     it("log user in and redirect to landing", async function () {
-    let userData = { username: "aldana.michelino@gmail.com", password: "Aldana23!" };
+    let userData = { username: "", password: "" };
     const response = await request.post("/api/auth/login")
     .send(userData);
     console.log('response body', response.body);
